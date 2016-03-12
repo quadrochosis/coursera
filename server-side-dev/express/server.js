@@ -1,43 +1,31 @@
+// Import Dependencies
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
+// Configure server options
 const hostname = 'localhost';
 const port = 3000;
 
+// Generate app
 const app = express();
 
+// Import routes
+const dishes = require('./routes/dishes');
+const promotions = require('./routes/promotions');
+const leadership = require('./routes/leadership');
+
+// Apply middlewares
 app.use(morgan('dev'));
-
 app.use(bodyParser.json());
-
-// Set the dish router
-const dishRouter = express.Router();
-dishRouter.use(bodyParser.json());
-dishRouter.route('/')
-.all((req, res, next) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-
-  next();
-})
-.get((req, res, next) => res.end('Will send all the dishes to you'))
-.post((req, res, next) => res.end(`Will add dish ${req.body.name} with details: ${req.body.description}.`))
-.delete((req, res, next) => res.end('Deleting all dishes'));
-
-dishRouter.route('/:dishId')
-.all((req, res, next) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-
-  next();
-})
-.get((req, res, next) => res.end(`Sending data for dish ${req.body.name}.`))
-.put((req, res, next) => res.end(`Updating dish ${req.body.name} [${req.params.dishId}] with details: ${req.body.description}.`))
-.delete((req, res, next) => res.end(`Deleting dish ${req.params.dishId}.`));
-
-app.use('/dishes', dishRouter);
-
 app.use(express.static(`${__dirname}/public`));
 
+// Register routes
+app.use('/dishes', dishes);
+app.use('/promotions', promotions);
+app.use('/leadership', leadership);
+
+// Start Server
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
