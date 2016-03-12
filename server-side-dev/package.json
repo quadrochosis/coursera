@@ -9,6 +9,7 @@
   "author": "Zack Penka",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.13.4",
     "yargs": "^4.2.0"
   }
 }
